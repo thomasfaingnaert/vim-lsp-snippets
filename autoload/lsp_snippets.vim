@@ -17,7 +17,7 @@ function! lsp_snippets#get_vim_completion_item(item, ...) abort
             let l:trigger = a:item['label']
             let l:snippet = call(g:lsp_snippets_get_snippet[0], [l:user_data['vim-lsp/textEdit']['newText']])
 
-            let l:user_data['vim-lsp/textEdit']['newText'] = call(g:lsp_snippets_get_new_text[0], [l:trigger])
+            let l:user_data['vim-lsp/textEdit']['newText'] = l:trigger
 
             let l:user_data['vim-lsp-snippets'] = { 'trigger': l:trigger, 'snippet': l:snippet }
             let l:completion['user_data'] = json_encode(l:user_data)
@@ -79,10 +79,6 @@ augroup END
 
 function! lsp_snippets#default_get_snippet(text) abort
     return a:text
-endfunction
-
-function! lsp_snippets#default_get_new_text(trigger) abort
-    return a:trigger
 endfunction
 
 function! lsp_snippets#default_expand_snippet(trigger, snippet) abort
