@@ -1,3 +1,20 @@
+function! s:dict_set(dict, keys, value) abort
+    " Top-level key
+    let l:key = a:keys[0]
+
+    " Base case
+    if len(a:keys) == 1
+        let a:dict[l:key] = a:value
+        return
+    endif
+
+    if !has_key(a:dict, l:key)
+        let a:dict[l:key] = {}
+    endif
+
+    call s:dict_set(a:dict[l:key], a:keys[1:], a:value)
+endfunction
+
 function! lsp_snippets#get_vim_completion_item(item, ...) abort
     let a:item['label'] = trim(a:item['label'])
 
@@ -35,14 +52,7 @@ function! lsp_snippets#get_supported_capabilities(server_info) abort
         return l:capabilities
     endif
 
-    let l:capabilities['textDocument'] =
-                \   {
-                \       'completion': {
-                \           'completionItem': {
-                \               'snippetSupport': v:true
-                \           }
-                \       }
-                \   }
+    call s:dict_set(l:capabilities, ['textDocument', 'completion', 'completionItem', 'snippetSupport'], v:true)
 
     return l:capabilities
 endfunction
