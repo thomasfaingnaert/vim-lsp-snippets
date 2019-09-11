@@ -25,8 +25,9 @@ function! lsp_snippets#get_vim_completion_item(item, ...) abort
         if has_key(a:item, 'insertText')
             let l:trigger = a:item['label']
             let l:snippet = call(g:lsp_snippets_get_snippet[0], [a:item['insertText']])
+            let l:user_data = json_decode(get(l:completion, 'user_data', '{}'))
 
-            let l:user_data = {'vim-lsp-snippets': { 'trigger': l:trigger, 'snippet': l:snippet } }
+            let l:user_data['vim-lsp-snippets'] = { 'trigger': l:trigger, 'snippet': l:snippet }
             let l:completion['user_data'] = json_encode(l:user_data)
         elseif has_key(a:item, 'textEdit')
             let l:user_data = json_decode(l:completion['user_data'])
